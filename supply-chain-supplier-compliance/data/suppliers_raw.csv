@@ -1,0 +1,16 @@
+supplier_id,supplier_name,country_code,duns_number,s_rating,registration_status,esg_status
+SUP001,"  Auto Parts GmbH  ",DE,123456789,92,Complete,Compliant
+SUP002,"Supplier ABC s.r.o.",CZ,234567891,78,Complete,Compliant
+SUP003,"Supplier XYZ S.L.",ES,,55,Incomplete,Non-Compliant
+SUP004,"Supplier DEF s.r.o.",SK,456789123,,Incomplete,Pending
+SUP005,"Supplier GHI GmbH",AT,567891234,88,Complete,Compliant
+SUP006,"Supplier JKL AG",CH,678912345,63,Complete,Pending
+SUP007,"Supplier MNO GmbH",DE,,48,Incomplete,Non-Compliant
+SUP008,"Supplier PQR S.L.",ES,789123456,85,Complete,Compliant
+SUP009," Auto Components GmbH",DE,123456789,91,Complete,Compliant
+SUP010,"Supplier RST s.r.o.",CZ,891234567,72,Complete,Pending
+SUP011,"Supplier UVW S.L.",ES,912345678,59,Complete,Non-Compliant
+SUP012,"Supplier XYZ S.L.",ES,,55,Incomplete,Non-Compliant
+SUP013,"Supplier QRS GmbH ",DE,345678912,87,Complete,Compliant
+SUP014,"Supplier TUV AG",CH,,69,Incomplete,Pending
+SUP015,"Supplier LMN s.r.o.",SK,456789321,81,Complete,Compliant

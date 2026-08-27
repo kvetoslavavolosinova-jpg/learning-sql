@@ -1,0 +1,16 @@
+supplier_id,s_rating,esg_status,code_of_conduct,assessment_date,compliance_status
+SUP001,92.0,Compliant,Accepted,2026-01-15,Compliant
+SUP002,78.0,Compliant,Accepted,2026-01-18,Compliant
+SUP003,55.0,Non-Compliant,Not Accepted,2026-01-20,Non-Compliant
+SUP004,,Pending,Pending,2026-01-22,Pending
+SUP005,88.0,Compliant,Accepted,2026-01-25,Compliant
+SUP006,63.0,Pending,Accepted,2026-01-28,Review Required
+SUP007,48.0,Non-Compliant,Not Accepted,2026-02-01,Non-Compliant
+SUP008,85.0,Compliant,Accepted,2026-02-03,Compliant
+SUP009,91.0,Compliant,Accepted,2026-02-05,Compliant
+SUP010,72.0,Pending,Accepted,2026-02-08,Review Required
+SUP011,59.0,Non-Compliant,Not Accepted,2026-02-10,Non-Compliant
+SUP012,55.0,Non-Compliant,Not Accepted,2026-02-12,Non-Compliant
+SUP013,87.0,Compliant,Accepted,2026-02-15,Compliant
+SUP014,69.0,Pending,Pending,2026-02-18,Pending
+SUP015,81.0,Compliant,Accepted,2026-02-20,Compliant

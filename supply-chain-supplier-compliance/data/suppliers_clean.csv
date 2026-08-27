@@ -1,0 +1,16 @@
+supplier_id,supplier_name,country_code,duns_number,s_rating,registration_status,esg_status,duns_status,registration_quality,compliance_status,duplicate_supplier
+SUP001,Auto Parts GmbH,DE,123456789.0,92.0,Complete,Compliant,Invalid,Complete,Compliant,False
+SUP002,Supplier ABC s.r.o.,CZ,234567891.0,78.0,Complete,Compliant,Invalid,Complete,Review Required,False
+SUP003,Supplier XYZ S.L.,ES,,55.0,Incomplete,Non-Compliant,Missing,Incomplete,High Risk,True
+SUP004,Supplier DEF s.r.o.,SK,456789123.0,,Incomplete,Pending,Invalid,Incomplete,Missing,False
+SUP005,Supplier GHI GmbH,AT,567891234.0,88.0,Complete,Compliant,Invalid,Complete,Compliant,False
+SUP006,Supplier JKL AG,CH,678912345.0,63.0,Complete,Pending,Invalid,Complete,Review Required,False
+SUP007,Supplier MNO GmbH,DE,,48.0,Incomplete,Non-Compliant,Missing,Incomplete,High Risk,False
+SUP008,Supplier PQR S.L.,ES,789123456.0,85.0,Complete,Compliant,Invalid,Complete,Compliant,False
+SUP009,Auto Components GmbH,DE,123456789.0,91.0,Complete,Compliant,Invalid,Complete,Compliant,False
+SUP010,Supplier RST s.r.o.,CZ,891234567.0,72.0,Complete,Pending,Invalid,Complete,Review Required,False
+SUP011,Supplier UVW S.L.,ES,912345678.0,59.0,Complete,Non-Compliant,Invalid,Complete,High Risk,False
+SUP012,Supplier XYZ S.L.,ES,,55.0,Incomplete,Non-Compliant,Missing,Incomplete,High Risk,True
+SUP013,Supplier QRS GmbH,DE,345678912.0,87.0,Complete,Compliant,Invalid,Complete,Compliant,False
+SUP014,Supplier TUV AG,CH,,69.0,Incomplete,Pending,Missing,Incomplete,Review Required,False
+SUP015,Supplier LMN s.r.o.,SK,456789321.0,81.0,Complete,Compliant,Invalid,Complete,Compliant,False
