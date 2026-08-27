@@ -1,26 +1,43 @@
 import sqlite3
 import pandas as pd
+import sys
 
-def execute_sql_file():
+
+def execute_sql_file(sql_file):
     conn = sqlite3.connect("practice.db")
+
     try:
-        # Prečítame dopyt zo súboru query.sql
-        with open("query.sql", "r", encoding="utf-8") as file:
+        with open(sql_file, "r", encoding="utf-8") as file:
             query = file.read()
-        
-        # Spustíme dopyt cez Pandas pre krajší výpis
-        df = pd.read_sql_query(query, conn)
-        print("\n" + "="*50)
-        print("                 VÝSLEDOK DOPYTU                 ")
-        print("="*50)
-        print(df.to_string(index=False))
-        print("="*50 + "\n")
+
+        # Execute SQL statements that do not return data
+        cursor = conn.cursor()
+        cursor.executescript(query)
+        conn.commit()
+
+        print("\n" + "=" * 50)
+        print("              SQL FILE EXECUTED")
+        print("=" * 50)
+        print(f"File: {sql_file}")
+        print("=" * 50 + "\n")
+
     except FileNotFoundError:
-        print("❌ Chyba: Súbor 'query.sql' neexistuje. Najprv ho vytvor!")
+        print(f"❌ Error: SQL file '{sql_file}' does not exist.")
+
     except Exception as e:
-        print(f"❌ SQL Chyba: {e}")
+        print(f"❌ SQL Error: {e}")
+
     finally:
         conn.close()
 
+
 if __name__ == "__main__":
-    execute_sql_file()
+
+    if len(sys.argv) < 2:
+        print("❌ Please provide an SQL file.")
+        print("Example: python3 run_sql.py lesson_15_supply_chain_case_study.sql")
+        sys.exit(1)
+
+    sql_file = sys.argv[1]
+
+    execute_sql_file(sql_file)
