@@ -1,0 +1,47 @@
+-- ============================================================
+-- LESSON 4: GROUPING DATA (GROUP BY & HAVING)
+-- ============================================================
+--
+-- In this lesson, we learn how to group rows that have the same values 
+-- into summary rows (like "find the number of employees in each department").
+--
+-- 1. THE "GROUP BY" CLAUSE
+--    - Groups rows that have the same values in specified columns.
+--    - It is always used with aggregate functions (COUNT, SUM, AVG, etc.).
+--
+--    Example: Count how many employees work in each department.
+--    SELECT department, COUNT(*) as employee_count
+--    FROM employees
+--    GROUP BY department;
+--
+-- 2. THE "HAVING" CLAUSE
+--    - Used to filter the results of a GROUP BY.
+--    - We cannot use WHERE to filter aggregated values; we must use HAVING instead.
+--
+--    Example: Find departments where the average salary is greater than 50000.
+--    SELECT department, AVG(salary) as average_salary
+--    FROM employees
+--    GROUP BY department
+--    HAVING AVG(salary) > 50000;
+--
+-- ============================================================
+-- PRACTICAL TASKS:
+-- ============================================================
+--
+-- Task 4A:
+-- Calculate the average salary (AVG) for each country.
+-- (Copy the query below to 'query.sql', SAVE the file, and run 'python3 run_sql.py')
+--
+-- SELECT country, AVG(salary) as average_salary
+-- FROM employees
+-- GROUP BY country;
+--
+--
+-- Task 4B:
+-- Find departments that have more than 1 employee.
+-- (Copy the query below to 'query.sql', SAVE the file, and run 'python3 run_sql.py')
+--
+-- SELECT department, COUNT(*) as total_staff
+-- FROM employees
+-- GROUP BY department
+-- HAVING COUNT(*) > 1;

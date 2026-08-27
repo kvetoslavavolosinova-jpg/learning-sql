@@ -1,0 +1,51 @@
+-- ============================================================
+-- LESSON 3: AGGREGATE FUNCTIONS (COUNT, SUM, AVG, MIN, MAX)
+-- ============================================================
+--
+-- Aggregate functions perform a calculation on a set of values and return a single value.
+-- These are essential for financial reporting, budgeting, and performance metrics.
+--
+-- 1. COUNT()
+--    - Counts the number of rows that match a specified criteria.
+--
+--    Example: Count the total number of employees in the table.
+--    SELECT COUNT(*) FROM employees;
+--
+-- 2. SUM()
+--    - Returns the total sum of a numeric column.
+--
+--    Example: Calculate the total payroll (sum of all salaries).
+--    SELECT SUM(salary) FROM employees;
+--
+-- 3. AVG()
+--    - Returns the average value of a numeric column.
+--
+--    Example: Find the average salary across the company.
+--    SELECT AVG(salary) FROM employees;
+--
+-- 4. MIN() and MAX()
+--    - MIN() returns the smallest value; MAX() returns the largest value.
+--
+--    Example: Get the minimum and maximum salary.
+--    SELECT MIN(salary), MAX(salary) FROM employees;
+--
+-- ============================================================
+-- PRACTICAL TASKS:
+-- ============================================================
+--
+-- Task 3A:
+-- Calculate the total payroll (SUM) of the 'Data Analytics' department.
+-- (Copy the query below to 'query.sql', save, and run 'python3 run_sql.py')
+--
+-- SELECT SUM(salary)
+-- FROM employees
+-- WHERE department = 'Data Analytics';
+--
+--
+-- Task 3B:
+-- Find the average salary (AVG) of employees who live in 'Spain'.
+-- (Copy the query below to 'query.sql', save, and run 'python3 run_sql.py')
+--
+-- SELECT AVG(salary)
+-- FROM employees
+-- WHERE country = 'Spain';

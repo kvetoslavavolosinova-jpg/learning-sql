@@ -1,0 +1,38 @@
+-- ============================================================
+-- LESSON 1: THE BASICS OF SELECT & FILTERING WITH WHERE
+-- ============================================================
+--
+-- 1. THE SELECT STATEMENT (Čítanie dát)
+--    - Used to retrieve data from a database.
+--    - The asterisk (*) means "ALL COLUMNS".
+--    - SQL keywords are written in UPPERCASE by convention (SELECT, FROM).
+--
+--    Example: Read everything from the employees table.
+--    SELECT * FROM employees;
+--
+-- 2. SELECTING SPECIFIC COLUMNS (Výber stĺpcov)
+--    - Instead of '*', we list the specific columns we want, separated by commas.
+--
+--    Example: Get only names and salaries.
+--    SELECT first_name, last_name, salary FROM employees;
+--
+-- 3. THE WHERE CLAUSE (Filtrovanie dát)
+--    - Used to filter rows based on a specific condition.
+--    - Strings (text) must be inside single quotes 'like this'.
+--    - Comparison operators: =, != (not equal), >, <, >=, <=
+--
+--    Example: Find employees in the 'Data Analytics' department.
+--    SELECT first_name, last_name, salary 
+--    FROM employees 
+--    WHERE department = 'Data Analytics';
+
+-- ============================================================
+-- YOUR TASK FOR TODAY:
+-- Copy one of the active queries below into 'query.sql' and run it!
+-- ============================================================
+
+-- Active Query A (Uncomment/copy this to query.sql):
+-- SELECT * FROM employees WHERE country = 'Spain';
+
+-- Active Query B (Uncomment/copy this to query.sql):
+-- SELECT first_name, last_name, salary FROM employees WHERE salary > 50000;

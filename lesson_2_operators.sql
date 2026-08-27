@@ -1,0 +1,50 @@
+-- ============================================================
+-- LESSON 2: LOGICAL OPERATORS (AND, OR, NOT)
+-- ============================================================
+--
+-- In this lesson, we learn how to combine multiple conditions in the WHERE clause.
+--
+-- 1. THE "AND" OPERATOR
+--    - Returns rows only if ALL conditions are met.
+--
+--    Example: Find employees in 'Data Analytics' who earn more than 60000.
+--    SELECT first_name, last_name, salary, department
+--    FROM employees
+--    WHERE department = 'Data Analytics' AND salary > 60000;
+--
+-- 2. THE "OR" OPERATOR
+--    - Returns rows if AT LEAST ONE of the conditions is met.
+--
+--    Example: Find employees who live in 'Spain' OR work in 'Sales'.
+--    SELECT first_name, last_name, country, department
+--    FROM employees
+--    WHERE country = 'Spain' OR department = 'Sales';
+--
+-- 3. THE "NOT" OPERATOR
+--    - Reverses the condition. Returns rows where the condition is NOT true.
+--
+--    Example: Find all employees who do NOT work in 'Sales'.
+--    SELECT first_name, last_name, department
+--    FROM employees
+--    WHERE NOT department = 'Sales';
+--
+-- ============================================================
+-- PRACTICAL TASKS:
+-- ============================================================
+--
+-- Task 2A:
+-- Select employees who work in 'Data Analytics' AND live in 'Spain'.
+-- (Copy the query below to 'query.sql', save, and run 'python3 run_sql.py')
+--
+-- SELECT first_name, last_name, department, country
+-- FROM employees
+-- WHERE department = 'Data Analytics' AND country = 'Spain';
+--
+--
+-- Task 2B:
+-- Select employees with a salary between 45000 and 55000 (inclusive) AND who do NOT live in 'Spain'.
+-- (We combine AND and NOT here)
+--
+-- SELECT first_name, last_name, salary, country
+-- FROM employees
+-- WHERE salary >= 45000 AND salary <= 55000 AND NOT country = 'Spain';

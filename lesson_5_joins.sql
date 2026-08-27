@@ -1,0 +1,33 @@
+-- ============================================================
+-- LESSON 5: JOINING TABLES (INNER JOIN & LEFT JOIN)
+-- ============================================================
+--
+-- In SQL, we use JOINS to combine rows from two or more tables
+-- based on a related column between them.
+--
+-- 1. THE "INNER JOIN"
+--    - Returns records that have matching values in BOTH tables.
+--    - If a department has no employees, or an employee has no department,
+--      they will NOT appear in the result.
+--
+--    Syntax:
+--    SELECT table1.column, table2.column
+--    FROM table1
+--    INNER JOIN table2 ON table1.common_column = table2.common_column;
+--
+-- 2. THE "LEFT JOIN"
+--    - Returns ALL records from the left table, and the matched records
+--      from the right table.
+--    - If there is no match, the result is NULL (empty) on the right side.
+--
+-- ============================================================
+-- PRACTICAL TASKS:
+-- ============================================================
+--
+-- Task 5A:
+-- Combine 'employees' and 'departments' to see each employee's manager and office floor.
+-- We join them ON the department name.
+--
+-- Task 5B:
+-- Find all departments and their employees (including HR, which has no employees).
+-- Here we use a LEFT JOIN starting from departments.
