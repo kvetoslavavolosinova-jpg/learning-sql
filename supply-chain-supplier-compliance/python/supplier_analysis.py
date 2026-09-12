@@ -55,17 +55,14 @@ on_time = (
     .assign(
         on_time=orders["delay_days"] <= 0
     )
-    .groupby("supplier_id")
-    ["on_time"]
+    .groupby("supplier_id")["on_time"]
     .mean()
     .reset_index()
 )
 
-
 on_time["on_time_delivery_rate"] = (
     on_time["on_time"] * 100
 )
-
 
 on_time = on_time.drop(
     columns=["on_time"]
@@ -73,15 +70,37 @@ on_time = on_time.drop(
 
 
 # ============================================================
-# 4. MERGE DELIVERY KPIs WITH SUPPLIER DATA
+# 4. PREPARE SUPPLIER MASTER DATA
+# ============================================================
+#
+# Compliance-specific fields are removed from the supplier
+# master dataset so that the compliance dataset becomes the
+# single authoritative source for:
+#
+#   - S-Rating
+#   - ESG status
+#   - Compliance status
 # ============================================================
 
-supplier_kpis = suppliers.merge(
+supplier_master = suppliers.drop(
+    columns=[
+        "s_rating",
+        "esg_status",
+        "compliance_status"
+    ],
+    errors="ignore"
+)
+
+
+# ============================================================
+# 5. MERGE SUPPLIER MASTER WITH DELIVERY KPIs
+# ============================================================
+
+supplier_kpis = supplier_master.merge(
     supplier_orders,
     on="supplier_id",
     how="left"
 )
-
 
 supplier_kpis = supplier_kpis.merge(
     on_time,
@@ -91,103 +110,87 @@ supplier_kpis = supplier_kpis.merge(
 
 
 # ============================================================
-# 5. COMPLIANCE RISK
+# 6. MERGE COMPLIANCE DATA
 # ============================================================
 
-supplier_kpis["compliance_risk"] = "Low Risk"
-
-
-supplier_kpis.loc[
-    supplier_kpis["s_rating"].isna(),
-    "compliance_risk"
-] = "High Risk"
-
-
-supplier_kpis.loc[
-    supplier_kpis["s_rating"] < 60,
-    "compliance_risk"
-] = "High Risk"
-
-
-supplier_kpis.loc[
-    (supplier_kpis["s_rating"] >= 60)
-    & (supplier_kpis["s_rating"] < 80),
-    "compliance_risk"
-] = "Medium Risk"
+supplier_kpis = supplier_kpis.merge(
+    compliance[
+        [
+            "supplier_id",
+            "s_rating",
+            "esg_status",
+            "code_of_conduct",
+            "assessment_date",
+            "compliance_status"
+        ]
+    ],
+    on="supplier_id",
+    how="left"
+)
 
 
 # ============================================================
-# 6. DELIVERY RISK
+# 7. SUPPLIER RISK CLASSIFICATION
 # ============================================================
-
-supplier_kpis["delivery_risk"] = "Low Risk"
-
-
-supplier_kpis.loc[
-    supplier_kpis["on_time_delivery_rate"] < 80,
-    "delivery_risk"
-] = "High Risk"
-
-
-supplier_kpis.loc[
-    (supplier_kpis["on_time_delivery_rate"] >= 80)
-    & (supplier_kpis["on_time_delivery_rate"] < 95),
-    "delivery_risk"
-] = "Medium Risk"
-
-
-# ============================================================
-# 7. MASTER DATA RISK
-# ============================================================
-
-supplier_kpis["master_data_risk"] = "Low Risk"
-
-
-supplier_kpis.loc[
-    supplier_kpis["duns_status"] != "Valid",
-    "master_data_risk"
-] = "High Risk"
-
-
-supplier_kpis.loc[
-    supplier_kpis["registration_quality"] == "Incomplete",
-    "master_data_risk"
-] = "High Risk"
-
-
-# ============================================================
-# 8. OVERALL SUPPLIER RISK
+#
+# HIGH RISK:
+#   S-Rating < 70
+#   OR On-Time Delivery < 70%
+#   OR ESG status is not Compliant
+#   OR Compliance status is not Compliant
+#
+# MEDIUM RISK:
+#   S-Rating < 85
+#   OR On-Time Delivery < 90%
+#
+# LOW RISK:
+#   Supplier meets all thresholds
+#
+# Business logic is aligned with the SQL analysis.
 # ============================================================
 
 supplier_kpis["supplier_risk"] = "Low Risk"
 
 
-# High Risk:
-# Critical compliance issue OR very poor delivery performance
+# High Risk
 
 supplier_kpis.loc[
     (
-        (supplier_kpis["compliance_risk"] == "High Risk")
+        (supplier_kpis["s_rating"].fillna(0) < 70)
         |
-        (supplier_kpis["delivery_risk"] == "High Risk")
+        (
+            supplier_kpis["on_time_delivery_rate"]
+            .fillna(0) < 70
+        )
+        |
+        (
+            supplier_kpis["esg_status"]
+            != "Compliant"
+        )
+        |
+        (
+            supplier_kpis["compliance_status"]
+            != "Compliant"
+        )
     ),
     "supplier_risk"
 ] = "High Risk"
 
 
-# Medium Risk:
-# Moderate compliance/delivery issue OR master-data issue
+# Medium Risk
+# Only suppliers not already classified as High Risk
 
 supplier_kpis.loc[
     (
         (supplier_kpis["supplier_risk"] == "Low Risk")
         &
         (
-            (supplier_kpis["compliance_risk"] == "Medium Risk")
+            (supplier_kpis["s_rating"].fillna(0) < 85)
             |
-            (supplier_kpis["delivery_risk"] == "Medium Risk")
-            |
-            (supplier_kpis["master_data_risk"] == "High Risk")
+            (
+                supplier_kpis["on_time_delivery_rate"]
+                .fillna(0) < 90
+            )
         )
     ),
     "supplier_risk"
@@ -195,7 +198,12 @@ supplier_kpis.loc[
 
 
 # ============================================================
-# 9. SUPPLIER PERFORMANCE SCORE
+# 8. SUPPLIER PERFORMANCE SCORE
+# ============================================================
+#
+# Performance Score:
+#   50% On-Time Delivery
+#   50% S-Rating
 # ============================================================
 
 supplier_kpis["performance_score"] = (
@@ -204,7 +212,6 @@ supplier_kpis["performance_score"] = (
     supplier_kpis["on_time_delivery_rate"].fillna(0) * 0.5
 )
 
-
 supplier_kpis["performance_score"] = (
     supplier_kpis["performance_score"]
     .round(2)
@@ -212,21 +219,26 @@ supplier_kpis["performance_score"] = (
 
 
 # ============================================================
-# 10. SUPPLIER RANKING
+# 9. SUPPLIER RANKING
+# ============================================================
+#
+# method="min" matches SQL RANK()
+# Example:
+#   1, 2, 3, 4, 4, 6
 # ============================================================
 
 supplier_kpis["supplier_rank"] = (
     supplier_kpis["performance_score"]
     .rank(
         ascending=False,
-        method="dense"
+        method="min"
     )
     .astype(int)
 )
 
 
 # ============================================================
-# 11. SORT BY RISK AND PERFORMANCE
+# 10. SORT BY RISK AND PERFORMANCE
 # ============================================================
 
 risk_order = {
@@ -235,12 +247,10 @@ risk_order = {
     "Low Risk": 3
 }
 
-
 supplier_kpis["risk_order"] = (
     supplier_kpis["supplier_risk"]
     .map(risk_order)
 )
-
 
 supplier_kpis = supplier_kpis.sort_values(
     by=[
@@ -253,14 +263,13 @@ supplier_kpis = supplier_kpis.sort_values(
     ]
 )
 
-
 supplier_kpis = supplier_kpis.drop(
     columns=["risk_order"]
 )
 
 
 # ============================================================
-# 12. MANAGEMENT SUMMARY
+# 11. MANAGEMENT SUMMARY
 # ============================================================
 
 print("=" * 60)
@@ -286,7 +295,7 @@ print(
 
 print(
     f"Average S-Rating: "
-    f"{suppliers['s_rating'].mean():.2f}"
+    f"{compliance['s_rating'].mean():.2f}"
 )
 
 print(
@@ -296,7 +305,7 @@ print(
 
 
 # ============================================================
-# 13. RISK SUMMARY
+# 12. RISK SUMMARY
 # ============================================================
 
 print()
@@ -311,7 +320,7 @@ print(
 
 
 # ============================================================
-# 14. HIGH-RISK SUPPLIERS
+# 13. HIGH-RISK SUPPLIERS
 # ============================================================
 
 print()
@@ -326,11 +335,12 @@ high_risk = supplier_kpis[
         "supplier_id",
         "supplier_name",
         "s_rating",
+        "esg_status",
+        "compliance_status",
         "on_time_delivery_rate",
         "supplier_risk"
     ]
 ]
-
 
 print(
     high_risk.to_string(
@@ -340,7 +350,7 @@ print(
 
 
 # ============================================================
-# 15. TOP SUPPLIERS
+# 14. TOP SUPPLIERS
 # ============================================================
 
 print()
@@ -352,7 +362,6 @@ top_suppliers = supplier_kpis.sort_values(
     by="performance_score",
     ascending=False
 ).head(5)
-
 
 print(
     top_suppliers[
@@ -369,7 +378,7 @@ print(
 
 
 # ============================================================
-# 16. EXPORT FINAL ANALYTICAL DATASET
+# 15. EXPORT FINAL ANALYTICAL DATASET
 # ============================================================
 
 supplier_kpis.to_csv(
