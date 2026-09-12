@@ -52,7 +52,7 @@ SELECT
 
     SUM(
         CASE
-            WHEN o.delivery_status = 'Delayed'
+            WHEN o.delivery_status IN ('Delayed', 'Significant Delay')
             THEN 1
             ELSE 0
         END
@@ -148,7 +148,7 @@ SELECT
 
     SUM(
         CASE
-            WHEN o.delivery_status = 'Delayed'
+            WHEN o.delivery_status IN ('Delayed', 'Significant Delay')
             THEN 1
             ELSE 0
         END
@@ -224,7 +224,7 @@ SELECT
 
     SUM(
         CASE
-            WHEN o.delivery_status = 'Delayed'
+            WHEN o.delivery_status IN ('Delayed', 'Significant Delay')
             THEN 1
             ELSE 0
         END
@@ -316,7 +316,7 @@ SELECT
 
     SUM(
         CASE
-            WHEN o.delivery_status = 'Delayed'
+            WHEN o.delivery_status IN ('Delayed', 'Significant Delay')
             THEN 1
             ELSE 0
         END
