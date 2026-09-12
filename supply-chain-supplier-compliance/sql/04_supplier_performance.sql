@@ -201,7 +201,7 @@ ORDER BY
 --   S-Rating < 70
 --   OR On-time delivery < 70%
 --   OR ESG status is not Compliant
---   OR Compliance status is not Complete
+--   OR Compliance status is not Compliant
 --
 -- MEDIUM RISK:
 --   S-Rating < 85
@@ -247,7 +247,7 @@ SELECT
 
         WHEN c.s_rating < 70
              OR c.esg_status != 'Compliant'
-             OR c.compliance_status != 'Complete'
+             OR c.compliance_status != 'Compliant'
              OR (
                  100.0 *
                  SUM(
@@ -353,7 +353,7 @@ GROUP BY
 HAVING
     c.s_rating < 70
     OR c.esg_status != 'Compliant'
-    OR c.compliance_status != 'Complete'
+    OR c.compliance_status != 'Compliant'
     OR (
         100.0 *
         SUM(

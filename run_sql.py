@@ -22,15 +22,16 @@ def execute_sql_file(sql_file):
 
             # Ignore comments before checking statement type
             clean_statement = "\n".join(
-                line for line in statement.splitlines()
+                line
+                for line in statement.splitlines()
                 if not line.strip().startswith("--")
             ).strip()
 
             if not clean_statement:
                 continue
 
-            # SELECT query
-            if clean_statement.upper().startswith("SELECT"):
+            # Queries that return data
+            if clean_statement.upper().startswith(("SELECT", "WITH")):
 
                 df = pd.read_sql_query(clean_statement, conn)
 
